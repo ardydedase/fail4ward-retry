@@ -15,8 +15,7 @@ export class UntilLimit {
         this.metrics = metrics || Metrics.New();
     }
 
-    // eslint-disable-next-line no-unused-vars
-    shouldRetry(_err: any) {
+    shouldRetry() {
         const doRetry = this.current < this.maxAttempts;
         this.metrics.emit({
             event: 'shouldretry',
@@ -34,16 +33,16 @@ export class UntilLimit {
     timeout() {
         this.current = this.current + 1;
         const timeout = this.timing.timeout();
-        // this.metrics.emit({
-        //     event: 'attempt',
-        //     tags: {
-        //         strategy: 'untillimit',
-        //         number: this.current,
-        //     },
-        //     value: 1,
-        //     type: this.metrics.type.COUNTER,
-        //     component: 'retry'
-        // });
+        this.metrics.emit({
+            event: 'attempt',
+            tags: {
+                strategy: 'untillimit',
+                number: this.current,
+            },
+            value: 1,
+            type: this.metrics.type.COUNTER,
+            component: 'retry'
+        });
         return timeout;
     }
 
