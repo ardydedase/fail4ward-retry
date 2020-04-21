@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import { StatsDSurfacer } from './surfacers/statsd';
 import { Prometheus } from './surfacers/prometheus';
 
-// TODO: fix any
+// TODO: fix 'any' types
 const MetricType = Object.freeze({
     COUNTER: 'counter',
     GAUGE: 'gauge',

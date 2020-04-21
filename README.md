@@ -1,6 +1,6 @@
-# resilience4node-retry
+# pliantjs
 
-resilience4node-retry
+pliantjs
 
 ## Specs
 

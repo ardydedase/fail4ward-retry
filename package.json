@@ -1,7 +1,7 @@
 {
-  "name": "resilience4node-retry",
+  "name": "pliantjs",
   "version": "0.1.0",
-  "description": "resilience4node-retry",
+  "description": "pliantjs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -17,15 +17,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ardydedase/resilience4node-retry.git"
+    "url": "git+https://github.com/ardydedase/pliantjs.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ardydedase/resilience4node-retry/issues"
+    "url": "https://github.com/ardydedase/pliantjs/issues"
   },
-  "homepage": "https://github.com/ardydedase/resilience4node-retry#readme",
+  "homepage": "https://github.com/ardydedase/pliantjs#readme",
   "devDependencies": {
     "@types/jest": "^25.2.1",
     "@types/node": "^13.13.0",
