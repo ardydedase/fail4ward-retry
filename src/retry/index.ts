@@ -4,7 +4,7 @@ import { FixedInterval } from './timing'
 import { exception } from 'console';
 
 export interface RetryConfig {
-  strategy?: any;
+  strategy?: any,
   maxAttempts: number,
   waitDuration: number, // ms
 }

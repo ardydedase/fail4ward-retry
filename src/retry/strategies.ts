@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 // const ms = require('../metrics/metrics.js');
-import { Metrics } from './metrics/metrics';
+import { Metrics } from '../metrics/metrics';
 
 
 export class UntilLimit {
@@ -18,16 +18,16 @@ export class UntilLimit {
     // eslint-disable-next-line no-unused-vars
     shouldRetry(_err: any) {
         const doRetry = this.current < this.maxAttempts;
-        // this.metrics.emit({
-        //     event: 'shouldretry',
-        //     tags: {
-        //         strategy: 'untillimit',
-        //         doretry:  doRetry,
-        //     },
-        //     value: 1,
-        //     type: this.metrics.type.COUNTER,
-        //     component: 'retry',
-        // });
+        this.metrics.emit({
+            event: 'shouldretry',
+            tags: {
+                strategy: 'untillimit',
+                doretry:  doRetry,
+            },
+            value: 1,
+            type: this.metrics.type.COUNTER,
+            component: 'retry',
+        });
         return doRetry;
     }
 

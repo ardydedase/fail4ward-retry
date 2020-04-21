@@ -1,9 +1,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 import 'jest';
-import { RetryConfigBuilder, RetryConfig, Retry } from '../src/index';
-import { exception } from 'console';
-import { UntilLimit } from '../src/strategies';
+import { RetryConfigBuilder, RetryConfig, Retry } from '../src/retry/index';
+import { UntilLimit } from '../src/retry/strategies';
 
 
 function getRandomInt(max: number) {
