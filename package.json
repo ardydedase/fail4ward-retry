@@ -1,7 +1,7 @@
 {
-  "name": "pliantjs",
+  "name": "fail4ward-retry",
   "version": "0.1.0",
-  "description": "pliantjs",
+  "description": "fail4ward-retry",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -17,15 +17,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ardydedase/pliantjs.git"
+    "url": "git+https://github.com/ardydedase/fail4ward-retry.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ardydedase/pliantjs/issues"
+    "url": "https://github.com/ardydedase/fail4ward-retry/issues"
   },
-  "homepage": "https://github.com/ardydedase/pliantjs#readme",
+  "homepage": "https://github.com/ardydedase/fail4ward-retry#readme",
   "devDependencies": {
     "@types/jest": "^25.2.1",
     "@types/node": "^13.13.0",

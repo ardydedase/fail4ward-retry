@@ -2,8 +2,8 @@
 /* eslint-disable no-undef */
 import 'jest';
 import fetch from 'node-fetch';
-import { RetryConfigBuilder, RetryConfig, Retry } from '../src/retry/index';
-import { UntilLimit } from '../src/retry/strategies';
+import { RetryConfigBuilder, RetryConfig, Retry } from '../src/index';
+import { UntilLimit } from '../src/strategies';
 
 
 function getRandomInt(max: number) {
