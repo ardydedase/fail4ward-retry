@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 import 'jest';
+import fetch from 'node-fetch';
 import { RetryConfigBuilder, RetryConfig, Retry } from '../src/retry/index';
 import { UntilLimit } from '../src/retry/strategies';
 
@@ -31,21 +32,41 @@ class DummyService {
   }
 }
 
-const failingFn = (msg: string) => {
-  return new Promise((_, reject) => {
-      reject(new Error(msg + '_failure'));
-  });
-};
+class Fail4ward {
+  private baseUrl:string;
+  constructor(baseUrl:string) {
+    this.baseUrl = baseUrl;
+  }
+
+  async successAfter(after:number=10) {
+    console.log('call successAfter');
+    try {
+      const res = await fetch(`${this.baseUrl}/success?after=${after}`);
+      const {status} = res;
+      if (status === 500) {
+        throw new Error('server error');
+      }
+      return res;
+    } catch(e) {
+      throw new Error(e);
+    }    
+  }
+}
 
 describe('test retries', () => {
+  let fail4ward:Fail4ward;
+  beforeAll(() =>   {
+    fail4ward = new Fail4ward('http://localhost:8000');
+  });
+ 
   test('retry failing function', async() => {
     const maxAttempts = 5;
     const waitDuration = 1000;
 
     const retryConfig: RetryConfig = new RetryConfigBuilder()
-      .maxAttempts(maxAttempts)
-      .waitDuration(waitDuration)
-      .strategy(UntilLimit)
+      .withMaxAttempts(maxAttempts)
+      .withWaitDuration(waitDuration)
+      .withStrategy(UntilLimit)
       .build();
 
     const retry = Retry.With(retryConfig);
@@ -55,26 +76,33 @@ describe('test retries', () => {
     expect(typeof retry.retryConfig.strategy).toBe('object');
 
     // test function
-    const fn = retry.decoratePromise(failingFn);
+    const fn = retry.decoratePromise(fail4ward.successAfter);
 
     try {
-      await fn('function');
+      const res = await fn('function');
+      console.log(res.json());
+      // by the time it's successful, there should have been x retries
+      if (res.status === 200) {
+        throw new Error();
+      }
+      console.log(`getting status: ${res.status}`);
     } catch(e) {
+      console.log(`maxAttempts: ${retry.retryConfig.strategy.current}`);
       expect(retry.retryConfig.strategy.current).toBeGreaterThanOrEqual(maxAttempts);
       expect(retry.retryConfig.strategy.timing.timeout()).toEqual(waitDuration);
-      expect(e.message).toContain('function_failure');
+      expect(e.message).toContain('Exceeded');
     }
 
-  });
+  }, 30000);
 
   test('retry failing method', async() => {
     const maxAttempts = 8;
     const waitDuration = 1000;
 
     const retryConfig: RetryConfig = new RetryConfigBuilder()
-      .maxAttempts(maxAttempts)
-      .waitDuration(waitDuration)
-      .strategy(UntilLimit)
+      .withMaxAttempts(maxAttempts)
+      .withWaitDuration(waitDuration)
+      .withStrategy(UntilLimit)
       .build();
 
     const retry = Retry.With(retryConfig);
@@ -102,9 +130,9 @@ describe('test retries', () => {
     const waitDuration = 500;
 
     const retryConfig: RetryConfig = new RetryConfigBuilder()
-      .maxAttempts(maxAttempts)
-      .waitDuration(waitDuration)
-      .strategy(UntilLimit)
+      .withMaxAttempts(maxAttempts)
+      .withWaitDuration(waitDuration)
+      .withStrategy(UntilLimit)
       .build();
 
     const retry = Retry.With(retryConfig);

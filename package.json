@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "jest --config jestconfig.json --runInBand",
+    "test": "tsc && jest --config jestconfig.json --runInBand",
     "build": "tsc",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint src/**",
@@ -35,6 +35,7 @@
     "eslint-plugin-jest": "^23.8.2",
     "jest": "^25.3.0",
     "prettier": "^2.0.4",
+    "testcontainers": "^2.8.0",
     "ts-jest": "^25.4.0",
     "typescript": "^3.8.3"
   },

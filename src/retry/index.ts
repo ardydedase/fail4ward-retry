@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-
 import { FixedInterval } from './timing'
 import { exception } from 'console';
 
@@ -13,24 +11,23 @@ export class RetryConfigBuilder {
   private readonly _retryConfig: RetryConfig;
 
   constructor() {
-    // default
     this._retryConfig = {
       maxAttempts: 0,
       waitDuration: 0,
     };
   }
 
-  maxAttempts(maxAttempts: number): RetryConfigBuilder {
+  withMaxAttempts(maxAttempts: number): RetryConfigBuilder {
     this._retryConfig.maxAttempts = maxAttempts;
     return this;
   }
 
-  waitDuration(waitDuration: number): RetryConfigBuilder {
+  withWaitDuration(waitDuration: number): RetryConfigBuilder {
     this._retryConfig.waitDuration = waitDuration;
     return this;
   }
 
-  strategy(retryStrategy: any): RetryConfigBuilder {
+  withStrategy(retryStrategy: any): RetryConfigBuilder {
     if (this._retryConfig.waitDuration <= 0 
       || this._retryConfig.maxAttempts <= 0) {
       throw exception('set required arguments');
@@ -70,8 +67,9 @@ export class Retry {
     return fn(...args)
     .catch((e: any) => {
       if (this.retryConfig.strategy.shouldRetry(e)) {
-        // eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars, no-undef
         return new Promise((resolve, reject) => {
+            // eslint-disable-next-line no-undef
             setTimeout(() => {
                 resolve(
                     this.retrier(fn, ...args)
@@ -80,6 +78,7 @@ export class Retry {
         })
       } 
 
+      // eslint-disable-next-line no-undef
       return new Promise((_, reject) => {
         reject(new RetryError(e).exceededRetries());
       });
