@@ -1,4 +1,10 @@
-export class UntilLimit {
+export interface Strategy {
+    timing: any;
+    maxAttempts: number;
+    current: number;
+}
+
+export class UntilLimit implements Strategy {
     timing: any;
     maxAttempts: number;
     current: number;
