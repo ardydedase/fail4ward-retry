@@ -1,6 +1,6 @@
-# pliantjs
+# fail4ward-retry
 
-pliantjs
+![CI](https://github.com/ardydedase/fail4ward-retry/workflows/CI/badge.svg?branch=master)
 
 ## Specs
 
