@@ -1,7 +1,8 @@
 import { FixedInterval } from './timing';
 import { exception } from 'console';
 
-export interface RetryConfig {
+
+export type RetryConfig = {
   strategy?: any;
   maxAttempts: number;
   waitDuration: number; // ms
@@ -64,9 +65,9 @@ export class Retry {
 
   public retrier(fn: any, ...args: any) {
     return fn(...args).catch((e: any) => {
-      if (this.retryConfig.strategy.shouldRetry(e)) {
+      if (this.retryConfig.strategy.shouldRetry()) {
         // eslint-disable-next-line no-unused-vars, no-undef
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
           // eslint-disable-next-line no-undef
           setTimeout(() => {
             resolve(this.retrier(fn, ...args));
@@ -87,7 +88,39 @@ export class Retry {
     };
   }
 
-  public static With(retyrConfig: RetryConfig) {
-    return new Retry(retyrConfig);
+  public static With(retryConfig: RetryConfig) {
+    return new Retry(retryConfig);
+  }
+}
+
+export interface Strategy {
+  timing: any;
+  maxAttempts: number;
+  current: number;
+}
+
+export class UntilLimit implements Strategy {
+  timing: any;
+  maxAttempts: number;
+  current: number;
+  constructor(timing: any, maxAttempts = 3) {
+    this.timing = timing;
+    this.maxAttempts = maxAttempts;
+    this.current = 0;
+  }
+
+  shouldRetry() {
+    this.current = this.current + 1;
+    const doRetry = this.current < this.maxAttempts;
+    return doRetry;
+  }
+
+  timeout() {
+    const timeout = this.timing.timeout();
+    return timeout;
+  }
+
+  public static New(timing: any, maxAttempts: number) {
+    return new UntilLimit(timing, maxAttempts);
   }
 }

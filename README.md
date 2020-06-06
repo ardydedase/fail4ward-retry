@@ -69,3 +69,4 @@ Inside the generated folder, run the following commands:
 
 - https://medium.com/better-programming/lets-look-at-the-builder-pattern-in-typescript-fb9cf202c04d
 - https://medium.com/dm03514-tech-blog/sre-resiliency-retries-in-action-using-js-8e4b7e7d4526
+- https://medium.com/cameron-nokes/the-30-second-guide-to-publishing-a-typescript-package-to-npm-89d93ff7bccd

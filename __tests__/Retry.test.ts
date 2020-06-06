@@ -1,9 +1,7 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 import 'jest';
 import fetch from 'node-fetch';
-import { RetryConfigBuilder, RetryConfig, Retry } from '../src/index';
-import { UntilLimit } from '../src/strategies';
+import { RetryConfigBuilder, RetryConfig, Retry, UntilLimit } from '../src/index';
 
 
 function getRandomInt(max: number) {
@@ -12,17 +10,17 @@ function getRandomInt(max: number) {
 
 class DummyService {
   get(forceFailure: boolean = false) {
-      return new Promise((resolve, reject) => {
-          // 99 / 100 times return a good response
-          let num = getRandomInt(100);
-          if (forceFailure) {
-            num = 0;
-          }
-          if (num === 0) {
-              reject(new Error('failed'));
-          }
-          resolve('success');
-      });
+    return new Promise((resolve, reject) => {
+      // 99 / 100 times return a good response
+      let num = getRandomInt(100);
+      if (forceFailure) {
+        num = 0;
+      }
+      if (num === 0) {
+        reject(new Error('failed'));
+      }
+      resolve('success');
+    });
   }
 
   failingFn(msg: string) {
