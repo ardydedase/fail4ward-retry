@@ -18,6 +18,7 @@ npm install --save fail4ward-retry
 
 1. Set the configuration using the `RetryConfigBuilder()`.
 
+```ts
         const maxAttempts = 5;
         const waitDuration = 1000;
 
@@ -26,15 +27,18 @@ npm install --save fail4ward-retry
                 .withWaitDuration(waitDuration)
                 .withStrategy(UntilLimit)
                 .build();
-
+```
 
 1. Decorate the function that calls your service using `Retry.decoratePromise()`.
 
+```ts
         const retry = Retry.With(retryConfig);
         const fn = retry.decoratePromise(failingFn);
+```        
 
 1. Call the function and retrieve the response.
 
+```ts
         try {
                 const res = await fn();
                 const retryResponse = await res.json();
@@ -42,6 +46,7 @@ npm install --save fail4ward-retry
         } catch(e) {
                 console.log(e);
         }
+```        
 
 ## Run the example
 
@@ -51,7 +56,7 @@ npm install --save fail4ward-retry
 
 1. Change directory to the `example` folder
 
-        cd example
+        cd example/
 
 1. Install dependencies
 
@@ -64,6 +69,7 @@ npm install --save fail4ward-retry
 ## Development
 
 1. Checkout the repo
+        
 
         git clone git@github.com:ardydedase/fail4ward-retry.git
 
