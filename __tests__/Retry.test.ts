@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import 'jest';
 import fetch from 'node-fetch';
-import { GenericContainer, StartedTestContainer } from 'testcontainers';
+import { GenericContainer } from 'testcontainers';
 import { RetryConfigBuilder, RetryConfig, Retry, UntilLimit } from '../src/index';
 
 function getRandomInt(max: number) {
