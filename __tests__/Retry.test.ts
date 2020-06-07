@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import 'jest';
 import fetch from 'node-fetch';
-import { GenericContainer } from 'testcontainers';
+import { GenericContainer, StartedTestContainer } from 'testcontainers';
 import { RetryConfigBuilder, RetryConfig, Retry, UntilLimit } from '../src/index';
 
 function getRandomInt(max: number) {
@@ -35,15 +35,17 @@ export class Fail4wardService {
   private baseUrl:string;
   private containerPort:number;
   private hostPort:number = 0;
+  private container:any;
 
   constructor() {
     this.baseUrl = 'http://localhost';
     this.containerPort = 8000;
+    
   }
 
   public async initContainer() {
-    const container = await this.startContainer();
-    this.hostPort = container.getMappedPort(this.containerPort);
+    this.container = await this.startContainer();
+    this.hostPort = this.container.getMappedPort(this.containerPort);
     const healthCheck = await this.getHealthCheck();
     console.log('healthCheck: ', await healthCheck.text());
   }
@@ -72,6 +74,11 @@ export class Fail4wardService {
     } catch(e) {
       throw new Error(e);
     }    
+  }
+
+  public async stopContainer() {
+    await this.container.stop();
+    console.log('stopped container');
   }
 }
 
