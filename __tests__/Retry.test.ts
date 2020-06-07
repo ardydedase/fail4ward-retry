@@ -1,45 +1,69 @@
 /* eslint-disable no-undef */
 import 'jest';
 import fetch from 'node-fetch';
+import { GenericContainer } from 'testcontainers';
 import { RetryConfigBuilder, RetryConfig, Retry, UntilLimit } from '../src/index';
-
 
 function getRandomInt(max: number) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-class DummyService {
+export class DummyService {
   get(forceFailure: boolean = false) {
-    return new Promise((resolve, reject) => {
-      // 99 / 100 times return a good response
-      let num = getRandomInt(100);
-      if (forceFailure) {
-        num = 0;
-      }
-      if (num === 0) {
-        reject(new Error('failed'));
-      }
-      resolve('success');
-    });
+      return new Promise((resolve, reject) => {
+          // 99 / 100 times return a good response
+          let num = getRandomInt(100);
+          if (forceFailure) {
+              num = 0;
+          }
+          if (num === 0) {
+              reject(new Error('failed'));
+          }
+          resolve('success');
+      });
   }
-
+  
   failingFn(msg: string) {
-    return new Promise((_, reject) => {
-      reject(new Error(msg + '_failure'));
-    });
+      return new Promise((_, reject) => {
+          reject(new Error(msg + '_failure'));
+      });
   }
 }
 
-class Fail4ward {
+
+export class Fail4wardService {
   private baseUrl:string;
-  constructor(baseUrl:string) {
-    this.baseUrl = baseUrl;
+  private containerPort:number;
+  private hostPort:number = 0;
+
+  constructor() {
+    this.baseUrl = 'http://localhost';
+    this.containerPort = 8000;
   }
 
-  async successAfter(after:number=10) {
+  public async initContainer() {
+    const container = await this.startContainer();
+    this.hostPort = container.getMappedPort(this.containerPort);
+    const healthCheck = await this.getHealthCheck();
+    console.log('healthCheck: ', await healthCheck.text());
+  }
+
+  private async getHealthCheck() {
+    const healthCheck = await fetch(`${this.baseUrl}:${this.hostPort}/health`);
+    return healthCheck;
+  }
+  
+  private async startContainer() {
+    const container = await new GenericContainer('ardydedase/fail4ward', 'latest')
+      .withExposedPorts(this.containerPort)
+      .start();
+    return container;  
+  }
+
+  public async successAfter(after:number=10) {
     console.log('call successAfter');
     try {
-      const res = await fetch(`${this.baseUrl}/success?after=${after}`);
+      const res = await fetch(`${this.baseUrl}:${this.hostPort}/success?after=${after}`);
       const {status} = res;
       if (status === 500) {
         throw new Error('server error');
@@ -51,30 +75,38 @@ class Fail4ward {
   }
 }
 
+// Start tests
+
 describe('test retries', () => {
-  let fail4ward:Fail4ward;
-  beforeAll(() =>   {
-    fail4ward = new Fail4ward('http://localhost:8000');
+  let fail4wardSvc:Fail4wardService;
+  beforeAll(() => {
+    fail4wardSvc = new Fail4wardService();
   });
- 
+
+  afterAll(async() => {
+    await fail4wardSvc.stopContainer();
+  });
+  
   test('retry failing function', async() => {
     const maxAttempts = 5;
     const waitDuration = 1000;
-
+    
     const retryConfig: RetryConfig = new RetryConfigBuilder()
       .withMaxAttempts(maxAttempts)
       .withWaitDuration(waitDuration)
       .withStrategy(UntilLimit)
       .build();
-
+    
     const retry = Retry.With(retryConfig);
     
     expect(retry.retryConfig.maxAttempts).toBe(maxAttempts);
     expect(retry.retryConfig.waitDuration).toBe(waitDuration);
     expect(typeof retry.retryConfig.strategy).toBe('object');
 
+    // initialise the service container
+    await fail4wardSvc.initContainer();
     // test function
-    const fn = retry.decoratePromise(fail4ward.successAfter);
+    const fn = retry.decoratePromise(fail4wardSvc.successAfter);
 
     try {
       const res = await fn('function');
@@ -89,29 +121,29 @@ describe('test retries', () => {
       expect(retry.retryConfig.strategy.current).toBeGreaterThanOrEqual(maxAttempts);
       expect(retry.retryConfig.strategy.timing.timeout()).toEqual(waitDuration);
       expect(e.message).toContain('Exceeded');
-    }
-
-  }, 30000);
-
+    }    
+    
+  }, 50000);
+  
   test('retry failing method', async() => {
     const maxAttempts = 8;
     const waitDuration = 1000;
-
+    
     const retryConfig: RetryConfig = new RetryConfigBuilder()
-      .withMaxAttempts(maxAttempts)
-      .withWaitDuration(waitDuration)
-      .withStrategy(UntilLimit)
-      .build();
-
+    .withMaxAttempts(maxAttempts)
+    .withWaitDuration(waitDuration)
+    .withStrategy(UntilLimit)
+    .build();
+    
     const retry = Retry.With(retryConfig);
     
     expect(retry.retryConfig.maxAttempts).toBe(maxAttempts);
     expect(retry.retryConfig.waitDuration).toBe(waitDuration);
     expect(typeof retry.retryConfig.strategy).toBe('object');
-
+    
     const service = new DummyService();
     const failingSvc = retry.decoratePromise(service.failingFn);
-
+    
     try {
       await failingSvc('class');
     } catch(e) {
@@ -119,31 +151,31 @@ describe('test retries', () => {
       expect(retry.retryConfig.strategy.timing.timeout()).toEqual(waitDuration);
       expect(e.message).toContain('class_failure');
     }
-
+    
   });  
-
-
+  
+  
   test('retry randomly failing method', async() => {
     const maxAttempts = 8;
     const waitDuration = 500;
-
+    
     const retryConfig: RetryConfig = new RetryConfigBuilder()
-      .withMaxAttempts(maxAttempts)
-      .withWaitDuration(waitDuration)
-      .withStrategy(UntilLimit)
-      .build();
-
+    .withMaxAttempts(maxAttempts)
+    .withWaitDuration(waitDuration)
+    .withStrategy(UntilLimit)
+    .build();
+    
     const retry = Retry.With(retryConfig);
     
     expect(retry.retryConfig.maxAttempts).toBe(maxAttempts);
     expect(retry.retryConfig.waitDuration).toBe(waitDuration);
     expect(typeof retry.retryConfig.strategy).toBe('object');
-
+    
     const service = new DummyService();
     const randomSvc = retry.decoratePromise(service.get);
-
+    
     let num = 0;
-
+    
     while (num < 101) {
       try {
         await randomSvc();
@@ -152,7 +184,7 @@ describe('test retries', () => {
       }
       num++;
     }
-
+    
     num = 0;
     // force failure
     while (num < 101) {
@@ -164,8 +196,8 @@ describe('test retries', () => {
       }
       num++;
     }    
-
+    
   });    
-
+  
 });
 
