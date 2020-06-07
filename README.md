@@ -16,36 +16,36 @@ npm install --save fail4ward-retry
 
 ## Usage
 
-- Set the configuration using the `RetryConfigBuilder()`.
+Set the configuration using the `RetryConfigBuilder()`.
 
 ```ts
-        const maxAttempts = 5;
-        const waitDuration = 1000;
+const maxAttempts = 5;
+const waitDuration = 1000;
 
-        const retryConfig: RetryConfig = new RetryConfigBuilder()
-                .withMaxAttempts(maxAttempts)
-                .withWaitDuration(waitDuration)
-                .withStrategy(UntilLimit)
-                .build();
+const retryConfig: RetryConfig = new RetryConfigBuilder()
+        .withMaxAttempts(maxAttempts)
+        .withWaitDuration(waitDuration)
+        .withStrategy(UntilLimit)
+        .build();
 ```
 
-- Decorate the function that calls your service using `Retry.decoratePromise()`.
+Decorate the function that calls your service using `Retry.decoratePromise()`.
 
 ```ts
-        const retry = Retry.With(retryConfig);
-        const fn = retry.decoratePromise(failingFn);
+const retry = Retry.With(retryConfig);
+const fn = retry.decoratePromise(failingFn);
 ```
 
-- Call the function and retrieve the response.
+Call the function that fetches the response from your API and retrieve the response.
 
 ```ts
-        try {
-                const res = await fn();
-                const retryResponse = await res.json();
-                console.log('retryResponse: ', retryResponse);
-        } catch(e) {
-                console.log(e);
-        }
+try {
+        const res = await fn();
+        const retryResponse = await res.json();
+        console.log('retryResponse: ', retryResponse);
+} catch(e) {
+        console.log(e);
+}
 ```
 
 ## Run the example
