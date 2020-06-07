@@ -1,6 +1,5 @@
 /* eslint-disable no-undef */
 import fetch from 'node-fetch';
-
 import { RetryConfigBuilder, RetryConfig, Retry, UntilLimit } from 'fail4ward-retry';
 
 
@@ -19,7 +18,7 @@ async function failingFn() {
     }
 }
 
-async function getMyRepos() {
+async function useRetry() {
     const maxAttempts = 5;
     const waitDuration = 1000;
 
@@ -43,4 +42,4 @@ async function getMyRepos() {
     
 };
 
-getMyRepos();
+useRetry();
