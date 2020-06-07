@@ -16,7 +16,7 @@ npm install --save fail4ward-retry
 
 ## Usage
 
-1. Set the configuration using the `RetryConfigBuilder()`.
+- Set the configuration using the `RetryConfigBuilder()`.
 
 ```ts
         const maxAttempts = 5;
@@ -29,14 +29,14 @@ npm install --save fail4ward-retry
                 .build();
 ```
 
-1. Decorate the function that calls your service using `Retry.decoratePromise()`.
+- Decorate the function that calls your service using `Retry.decoratePromise()`.
 
 ```ts
         const retry = Retry.With(retryConfig);
         const fn = retry.decoratePromise(failingFn);
-```        
+```
 
-1. Call the function and retrieve the response.
+- Call the function and retrieve the response.
 
 ```ts
         try {
@@ -46,7 +46,7 @@ npm install --save fail4ward-retry
         } catch(e) {
                 console.log(e);
         }
-```        
+```
 
 ## Run the example
 
