@@ -2,31 +2,47 @@
 
 ![CI](https://github.com/ardydedase/fail4ward-retry/workflows/CI/badge.svg?branch=master)
 
-## Specs
+## Installation
 
-- Starter code in Typescript (for now).
-- Tested on:
-  - npm 6.13.4
-  - node v10.19.0
+```
+npm install --save fail4ward-retry
+```
 
 ## Usage
 
-1. Install cookiecutter
+1. Set the configuration using the `RetryConfigBuilder()`.
 
-        pip install cookiecutter
+        const maxAttempts = 5;
+        const waitDuration = 1000;
 
-1. Cookie cut the template.
+        const retryConfig: RetryConfig = new RetryConfigBuilder()
+                .withMaxAttempts(maxAttempts)
+                .withWaitDuration(waitDuration)
+                .withStrategy(UntilLimit)
+                .build();
 
-        cookiecutter git@github.com:ardydedase/cookiecutter-npm-package.git
 
-1. Enter the values accordingly. Pick a unique project name, it will be used as your npm package name. You can check if the package name is available in https://www.npmjs.com/.
+1. Decorate the function that calls your service using `Retry.decoratePromise()`.
 
+        const retry = Retry.With(retryConfig);
+        const fn = retry.decoratePromise(failingFn);
 
-1. Change the working directory to the generated folder, same name as the project slug.
+1. Call the function and retrieve the response.
 
-        cd <project_slug>
+        try {
+                const res = await fn();
+                const retryResponse = await res.json();
+                console.log('retryResponse: ', retryResponse);
+        } catch(e) {
+                console.log(e);
+        }
+
 
 ## Development
+
+1. Checkout the repo:
+
+        git clone git@github.com:ardydedase/fail4ward-retry.git
 
 1. Install dependencies
 
@@ -45,25 +61,6 @@
 1. Run tests
 
         npm test
-
-1. Build on top of the starter example in `src` folder is a simple function that returns a string.
-
-## Publish package
-
-Inside the generated folder, run the following commands:
-
-1. If you don't have an npm account, create one on: https://www.npmjs.com/signup or run the command: `npm adduser`
-
-1. If you already have an account, login by running the following command:
-
-        npm login
-
-1. When you're successfully logged-in. Publish the package:
-
-        npm publish
-
-1. You should now be able to `npm install` your published package. There is an npm package called [reference-package](https://www.npmjs.com/package/reference-package) which is generated from this cookiecutter. There is a sample usage in [example/index.js](example/index.js).
-
 
 ## References
 
