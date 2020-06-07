@@ -1,6 +1,9 @@
 # fail4ward-retry
 
+NPM package to implement Retry Pattern in your node applications. Created from this cookiecutter template: https://github.com/ardydedase/cookiecutter-npm-package
+
 ![CI](https://github.com/ardydedase/fail4ward-retry/workflows/CI/badge.svg?branch=master)
+
 
 ## Specs
 
