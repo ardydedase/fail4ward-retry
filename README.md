@@ -2,6 +2,12 @@
 
 ![CI](https://github.com/ardydedase/fail4ward-retry/workflows/CI/badge.svg?branch=master)
 
+## Specs
+
+Tested on:
+- npm 6.13.4
+- node v10.19.0
+
 ## Installation
 
 ```
@@ -37,10 +43,27 @@ npm install --save fail4ward-retry
                 console.log(e);
         }
 
+## Run the example
+
+1. Checkout the repo
+
+        git clone git@github.com:ardydedase/fail4ward-retry.git
+
+1. Change directory to the `example` folder
+
+        cd example
+
+1. Install dependencies
+
+        npm install
+
+1. Run the example file
+
+        npm run dev
 
 ## Development
 
-1. Checkout the repo:
+1. Checkout the repo
 
         git clone git@github.com:ardydedase/fail4ward-retry.git
 
