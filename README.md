@@ -4,7 +4,7 @@ NPM package to implement Retry Pattern in your node applications. Created from t
 
 [![CI](https://github.com/ardydedase/fail4ward-retry/workflows/CI/badge.svg?branch=master)](https://github.com/ardydedase/fail4ward-retry/actions?query=workflow%3ACI) [![npm-publish](https://github.com/ardydedase/fail4ward-retry/workflows/npm-publish/badge.svg?branch=master)](https://github.com/ardydedase/fail4ward-retry/actions?query=workflow%3Anpm-publish)
 
-[![NPM](https://nodei.co/npm/fail4ward-retry.png)](https://nodei.co/npm/fail4ward-retry/)
+[![NPM](https://nodei.co/npm/fail4ward-retry.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/fail4ward-retry/)
 
 ## Specs
 
