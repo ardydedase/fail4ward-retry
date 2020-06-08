@@ -11,10 +11,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@master
 
     - name: Setup node
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@master
+      with:
+        node-version: 10.0.0      
 
     - name: Install npm packages
       run: |
