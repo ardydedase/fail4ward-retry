@@ -20,6 +20,12 @@ npm install --save fail4ward-retry
 
 ## Usage
 
+Import what we need.
+
+```ts
+import { RetryConfigBuilder, RetryConfig, Retry, UntilLimit } from 'fail4ward-retry';
+```
+
 Set the configuration using the `RetryConfigBuilder()`.
 
 ```ts
