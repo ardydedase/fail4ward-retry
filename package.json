@@ -1,6 +1,6 @@
 {
   "name": "fail4ward-retry",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "fail4ward-retry",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
