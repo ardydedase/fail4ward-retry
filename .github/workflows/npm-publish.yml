@@ -1,12 +1,12 @@
-name: CI
+name: npm-publish
 
 on:
   push:
     branches: [ master ]
 
 jobs:
-  build:
-    name: build
+  npm-publish:
+    name: npm-publish
     runs-on: ubuntu-latest
 
     steps:
