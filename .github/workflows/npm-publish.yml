@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+
+    - name: Setup node
+      uses: actions/setup-node@master
+      with:
+        node-version: 10.0.0      
+
+    - name: Install npm packages
+      run: |
+        npm install
+
+    - name: Format and lint
+      run: |
+        npm run lint
+
+    - name: Run tests
+      run: |
+        npm run test
+
+    - name: Run build
+      run: |
+        npm run build
+
+    - name: Publish if version has been updated
+      uses: pascalgn/npm-publish-action@master
+      with: # All of theses inputs are optional
+        tag_name: "v%s"
+        tag_message: "v%s"
+        commit_pattern: "^Release (\\S+)"
+      env: # More info about the environment variables in the README
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Leave this as is, it's automatically generated
+        NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }} # You need to set this in your repo settings        
