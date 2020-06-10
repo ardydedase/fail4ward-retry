@@ -1,6 +1,6 @@
 # fail4ward-retry
 
-NPM package to implement Retry Pattern in your node applications. Created from this cookiecutter template: https://github.com/ardydedase/cookiecutter-npm-package
+NPM package to implement Retry Pattern in your node applications. Created from this [Cookiecutter Template](https://github.com/ardydedase/cookiecutter-npm-package).
 
 [![CI](https://github.com/ardydedase/fail4ward-retry/workflows/CI/badge.svg?branch=master)](https://github.com/ardydedase/fail4ward-retry/actions?query=workflow%3ACI) [![npm-publish](https://github.com/ardydedase/fail4ward-retry/workflows/npm-publish/badge.svg?branch=master)](https://github.com/ardydedase/fail4ward-retry/actions?query=workflow%3Anpm-publish)
 
@@ -71,6 +71,10 @@ try {
 1. Install dependencies
 
         npm install
+
+1. Run a test service
+
+        docker run --name fail-svc -p 8000:8000 -it ardydedase/fail4ward:latest
 
 1. Run the example file
 
