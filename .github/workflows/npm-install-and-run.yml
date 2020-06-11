@@ -2,7 +2,7 @@ name: npm-install-and-run
 
 on:
   release:
-    types: [released]
+    types: [created, edited, released]
 
 jobs:
   npm-install-and-run:
