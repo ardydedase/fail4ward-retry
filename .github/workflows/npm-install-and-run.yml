@@ -1,8 +1,8 @@
 name: npm-install-and-run
 
 on:
-  release:
-    types: [released]
+  push:
+    branches: [ master ]
 
 jobs:
   npm-install-and-run:
