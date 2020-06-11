@@ -39,12 +39,40 @@ const retryConfig: RetryConfig = new RetryConfigBuilder()
         .build();
 ```
 
-Decorate the function that calls your service using `Retry.decoratePromise()`.
+Builder properties we are setting
+
+- `withMaxAttempts()` number of attempts to retry.
+- `withWaitDuration()` backoff time in milliseconds.
+- `withStrategy()` retry strategy to use. This package currently supports `UntilLimit`.
+
+Decorate the function that calls your service using the retryConfig instantiated with `Retry.decoratePromise()`.
 
 ```ts
 const retry = Retry.With(retryConfig);
 const fn = retry.decoratePromise(failingFn);
 ```
+
+Below is an example of the `failingFn` calls an API. Similar functions can be found in the [/example](/example) and [/\_\_tests\_\_](/__tests__) folders.
+<details>
+  <summary>Click to expand</summary>
+
+```ts
+async function failingFn() {
+  const url = `http://localhost:8000/error`;
+  try {
+    const res = await fetch(url);
+    const {status} = res;
+    if (status === 500) {
+      throw new Error('server error');
+    }
+    return res;
+  } catch(e) {
+    throw new Error(e);
+  }
+}
+```
+</details>
+
 
 Call the function that fetches the response from your API and retrieve the response.
 

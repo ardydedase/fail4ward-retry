@@ -5,7 +5,7 @@ import { exception } from 'console';
 export type RetryConfig = {
   strategy?: any;
   maxAttempts: number;
-  waitDuration: number; // ms
+  waitDuration: number; // in milliseconds
 }
 
 export class RetryConfigBuilder {
