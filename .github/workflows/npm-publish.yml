@@ -42,3 +42,12 @@ jobs:
       env: # More info about the environment variables in the README
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Leave this as is, it's automatically generated
         NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }} # You need to set this in your repo settings        
+  
+    - name: Install latest npm package in sample app
+      run: |
+        npm install
+        
+    - name: Run published package using sample app
+      working-directory: example/
+      run: |
+        npm run dev      

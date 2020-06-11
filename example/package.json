@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "fail4ward-retry": "^0.1.4",
+    "fail4ward-retry": "latest",
     "help": "^3.0.2",
     "reference-package": "^0.1.3"
   },
