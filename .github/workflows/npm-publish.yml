@@ -44,6 +44,7 @@ jobs:
         NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }} # You need to set this in your repo settings        
   
     - name: Install latest npm package in sample app
+      working-directory: example/
       run: |
         npm install
         
