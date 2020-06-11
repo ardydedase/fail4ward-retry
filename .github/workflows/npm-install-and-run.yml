@@ -1,0 +1,28 @@
+name: npm-install-and-run
+
+on:
+  release:
+    types: [released]
+
+jobs:
+  npm-install-and-run:
+    name: npm-install-and-run
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+
+    - name: Setup node
+      uses: actions/setup-node@master
+      with:
+        node-version: 10.0.0      
+
+    - name: Install latest npm package in sample app
+      working-directory: example/
+      run: |
+        npm install
+        
+    - name: Run published package using sample app
+      working-directory: example/
+      run: |
+        npm run dev      
