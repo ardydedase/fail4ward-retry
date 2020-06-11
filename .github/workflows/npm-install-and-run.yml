@@ -15,7 +15,10 @@ jobs:
     - name: Setup node
       uses: actions/setup-node@master
       with:
-        node-version: 10.0.0      
+        node-version: 10.0.0
+
+    - name: Run fail4wardjs-svc docker container
+      run: docker run --name fail-svc -p 8000:8000 -it ardydedase/fail4ward:latest
 
     - name: Install latest npm package in sample app
       working-directory: example/
