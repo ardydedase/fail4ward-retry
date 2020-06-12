@@ -59,8 +59,8 @@ export class Fail4wardService {
   
   private async startContainer() {
     const container = await new GenericContainer('ardydedase/fail4ward', 'latest')
-    .withExposedPorts(this.containerPort)
-    .start();
+      .withExposedPorts(this.containerPort)
+      .start();
     return container;  
   }
   
@@ -115,10 +115,10 @@ describe('test retries', () => {
     const waitDuration = 1000;
     
     const retryConfig: RetryConfig = new RetryConfigBuilder()
-    .withMaxAttempts(maxAttempts)
-    .withWaitDuration(waitDuration)
-    .withStrategy(UntilLimit)
-    .build();
+      .withMaxAttempts(maxAttempts)
+      .withWaitDuration(waitDuration)
+      .withStrategy(UntilLimit)
+      .build();
     
     const retry = Retry.With(retryConfig);
     
@@ -154,10 +154,10 @@ describe('test retries', () => {
     const waitDuration = 1000;
     
     const retryConfig: RetryConfig = new RetryConfigBuilder()
-    .withMaxAttempts(maxAttempts)
-    .withWaitDuration(waitDuration)
-    .withStrategy(UntilLimit)
-    .build();
+      .withMaxAttempts(maxAttempts)
+      .withWaitDuration(waitDuration)
+      .withStrategy(UntilLimit)
+      .build();
     
     const retry = Retry.With(retryConfig);
     
@@ -192,10 +192,10 @@ describe('test retries', () => {
     const waitDuration = 1000;
     
     const retryConfig: RetryConfig = new RetryConfigBuilder()
-    .withMaxAttempts(maxAttempts)
-    .withWaitDuration(waitDuration)
-    .withStrategy(UntilLimit)
-    .build();
+      .withMaxAttempts(maxAttempts)
+      .withWaitDuration(waitDuration)
+      .withStrategy(UntilLimit)
+      .build();
     
     const retry = Retry.With(retryConfig);
     
@@ -222,11 +222,11 @@ describe('test retries', () => {
     const waitDuration = 500;
     
     const retryConfig: RetryConfig = new RetryConfigBuilder()
-    .withMaxAttempts(maxAttempts)
-    .withWaitDuration(waitDuration)
-    .withStrategy(UntilLimit)
-    .build();
-    
+      .withMaxAttempts(maxAttempts)
+      .withWaitDuration(waitDuration)
+      .withStrategy(UntilLimit)
+      .build();
+      
     const retry = Retry.With(retryConfig);
     
     expect(retry.retryConfig.maxAttempts).toBe(maxAttempts);

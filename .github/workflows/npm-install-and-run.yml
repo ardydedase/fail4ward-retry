@@ -17,11 +17,6 @@ jobs:
       with:
         node-version: 10.0.0
 
-    - name: Run fail4wardjs-svc docker container
-      run: |
-        docker run -p 8000:8000 ardydedase/fail4ward:latest
-        exit 0
-
     - name: Install latest npm package in sample app
       working-directory: example/
       run: |

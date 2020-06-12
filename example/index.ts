@@ -1,14 +1,24 @@
 /* eslint-disable no-undef */
 import fetch from 'node-fetch';
+import { GenericContainer } from 'testcontainers';
 import { RetryConfigBuilder, RetryConfig, Retry, UntilLimit } from 'fail4ward-retry';
 
 
-async function resetStats() {
-  await fetch('http://localhost:8000/reset');
+async function resetStats(hostPort: number) {
+  await fetch(`http://localhost:${hostPort}/reset`);
 }
 
-async function failingFn(timeout: number = 5000) {
-  const url = `http://localhost:8000/error?timeout=${timeout}`;
+async function runFail4wardContainer(containerPort: number) {
+  // run container for testing failing service.
+  const container = await new GenericContainer('ardydedase/fail4ward', 'latest')
+    .withExposedPorts(containerPort)
+    .start();  
+
+  return container;
+}
+
+async function failingFn(hostPort: number, timeout: number = 5000) {
+  const url = `http://localhost:${hostPort}/error?timeout=${timeout}`;
   console.log('fetching url: ', url);
   try {
     const res = await fetch(url);
@@ -22,8 +32,8 @@ async function failingFn(timeout: number = 5000) {
   }
 }
 
-async function successfulFn(afterAttempts: number = 5) {
-  const url = `http://localhost:8000/success?after=${afterAttempts}`;
+async function successfulFn(hostPort: number, afterAttempts: number = 5) {
+  const url = `http://localhost:${hostPort}/success?after=${afterAttempts}`;
   console.log('fetching url: ', url);
   try {
     const res = await fetch(url);
@@ -37,7 +47,7 @@ async function successfulFn(afterAttempts: number = 5) {
   }
 }
 
-async function useRetryForFailingFn() {
+async function useRetryForFailingFn(hostPort: number) {
   const maxAttempts:number = 5;
   const waitDuration:number = 1000;
   
@@ -53,7 +63,7 @@ async function useRetryForFailingFn() {
   console.log('testing a failing function call');
   const failFn = retry.decoratePromise(failingFn);
   try {
-    const res:Response = await failFn();
+    const res:Response = await failFn(hostPort);
     const retryResponse:JSON = await res.json();
     console.log(`something went wrong, retry did not work. response: ${retryResponse}`);
   } catch(e) {
@@ -61,7 +71,7 @@ async function useRetryForFailingFn() {
   }
 };
 
-async function useRetryForSuccessFn() {
+async function useRetryForSuccessFn(hostPort: number) {
   const maxAttempts:number = 5;
   const waitDuration:number = 1000;
   
@@ -76,7 +86,7 @@ async function useRetryForSuccessFn() {
   console.log('testing a successful function call');
   const successFn = retry.decoratePromise(successfulFn);
   try {
-    const res:Response = await successFn();
+    const res:Response = await successFn(hostPort);
     const retryResponse:JSON = await res.json();
     console.log(`something went wrong, retry did not work. response: ${retryResponse}`);
   } catch(e) {
@@ -85,9 +95,12 @@ async function useRetryForSuccessFn() {
 };
 
 async function useRetry() {
-  await resetStats();
-  await useRetryForFailingFn();
-  await useRetryForSuccessFn();
+  const containerPort: number = 8000;
+  const container = await runFail4wardContainer(containerPort);
+  const hostPort: number = container.getMappedPort(containerPort);
+  await resetStats(hostPort);
+  await useRetryForFailingFn(hostPort);
+  await useRetryForSuccessFn(hostPort);
 }
 
 useRetry();
