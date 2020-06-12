@@ -1,12 +1,12 @@
-name: npm-install-and-run
+name: npm-install-and-use-package
 
 on:
   push:
     branches: [ master ]
 
 jobs:
-  npm-install-and-run:
-    name: npm-install-and-run
+  npm-install-and-use-package:
+    name: npm-install-and-use-package
     runs-on: ubuntu-latest
 
     steps:
