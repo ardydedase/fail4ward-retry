@@ -10,19 +10,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Wait for npm publish to succeed
+      uses: fountainhead/action-wait-for-check@v1.0.0
+      id: wait-for-npm-publish
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        checkName: npm-publish
+        ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
     - uses: actions/checkout@master
+      if: steps.wait-for-npm-publish.outputs.conclusion == 'success'    
 
     - name: Setup node
       uses: actions/setup-node@master
+      if: steps.wait-for-npm-publish.outputs.conclusion == 'success'
       with:
         node-version: 10.0.0
 
     - name: Install latest npm package in sample app
+      if: steps.wait-for-npm-publish.outputs.conclusion == 'success'    
       working-directory: example/
       run: |
         npm install
         
     - name: Run published package using sample app
+      if: steps.wait-for-npm-publish.outputs.conclusion == 'success'    
       working-directory: example/
       run: |
         npm run dev      
