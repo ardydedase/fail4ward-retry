@@ -101,6 +101,7 @@ async function useRetry() {
   await resetStats(hostPort);
   await useRetryForFailingFn(hostPort);
   await useRetryForSuccessFn(hostPort);
+  container.stop();
 }
 
 useRetry();
