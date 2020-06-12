@@ -7,7 +7,7 @@ NPM package to implement Retry Pattern in your nodejs applications. Created from
 [![NPM](https://nodei.co/npm/fail4ward-retry.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/fail4ward-retry/)
 
 ## Features
-- Uses the builder pattern, implementation is similar to [resilience4j](https://resilience4j.readme.io/).
+- Uses the builder pattern, implementation inspired by [resilience4j](https://resilience4j.readme.io/).
 - Uses the [fail4ward service](https://hub.docker.com/repository/docker/ardydedase/fail4ward) docker image to run a  service to test with.
 - Uses [testcontainers-node](https://github.com/testcontainers/testcontainers-node) to test against a running docker service.
 - Supports `UntilLimit` strategy. Based on the Medium article [SRE: Resiliency: Retries in Action — Availability in Exchange for Latency](https://medium.com/dm03514-tech-blog/sre-resiliency-retries-in-action-using-js-8e4b7e7d4526)
