@@ -2,9 +2,15 @@
 
 NPM package to implement Retry Pattern in your nodejs applications. Created from this [Cookiecutter Template](https://github.com/ardydedase/cookiecutter-npm-package).
 
-[![CI](https://github.com/ardydedase/fail4ward-retry/workflows/CI/badge.svg?branch=master)](https://github.com/ardydedase/fail4ward-retry/actions?query=workflow%3ACI) [![npm-publish](https://github.com/ardydedase/fail4ward-retry/workflows/npm-publish/badge.svg?branch=master)](https://github.com/ardydedase/fail4ward-retry/actions?query=workflow%3Anpm-publish)
+[![CI](https://github.com/ardydedase/fail4ward-retry/workflows/CI/badge.svg?branch=master)](https://github.com/ardydedase/fail4ward-retry/actions?query=workflow%3ACI) [![npm-publish](https://github.com/ardydedase/fail4ward-retry/workflows/npm-publish/badge.svg?branch=master)](https://github.com/ardydedase/fail4ward-retry/actions?query=workflow%3Anpm-publish) [![npm-install-and-use-package](https://github.com/ardydedase/fail4ward-retry/workflows/npm-install-and-use-package/badge.svg)](https://github.com/ardydedase/fail4ward-retry/actions?query=workflow%3Anpm-install-and-use-package)
 
 [![NPM](https://nodei.co/npm/fail4ward-retry.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/fail4ward-retry/)
+
+## Features
+- Uses the builder pattern, implementation is similar to `resilience4j`.
+- Uses the `ardydedase/fail4wardjs-svc` docker image to run a  service to test with.
+- Uses `testcontainers-node` to test against a running docker service.
+- Supports `UntilLimit` strategy.
 
 ## Specs
 
@@ -54,11 +60,11 @@ const fn = retry.decoratePromise(failingFn);
 
 Below is an example of the `failingFn` calls an API. Similar functions can be found in the [/example](/example) and [/\_\_tests\_\_](/__tests__) folders.
 <details>
-  <summary>Click to expand</summary>
+  <summary>Click to see failingFn()</summary>
 
 ```ts
 async function failingFn() {
-  const url = `http://localhost:8000/error`;
+  const url = 'http://localhost:8000/error';
   try {
     const res = await fetch(url);
     const {status} = res;
